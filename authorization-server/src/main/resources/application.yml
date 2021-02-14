@@ -3,22 +3,23 @@ server:
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://127.0.0.1:5432/portal
+    url: jdbc:postgresql://127.0.0.1:5432/oauth
     username: vtw
     password: vtw123#
   jpa:
     generate-ddl: true
     hibernate:
-      ddl-auto: create
-  security:
-    user:
-      name: blindprayer
-      password: 30539w
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: http://auth-server:9000
+      ddl-auto: update
+  zuul:
+    routes:
+      foos:
+        path: /foos/**
+        url: http://localhost:8081/spring-zuul-foos-resource/foos
 logging:
   level:
     root: info
     '[com.vtw]': debug
+    logging.level.web: TRACE
+    logging.level.org.springframework.web: TRACE
+    '[org.springframework.security]': trace
+    '[org.springframework.cloud.gateway]': trace

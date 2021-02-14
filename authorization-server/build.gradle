@@ -12,10 +12,19 @@ repositories {
 	mavenCentral()
 }
 
+ext {
+  set('springCloudVersion', "2020.0.1")
+}
+
+dependencyManagement {
+  imports {
+    mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+  }
+}
+
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-data-rest'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.apache.camel.springboot:camel-spring-boot-starter:3.7.1'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
@@ -23,11 +32,13 @@ dependencies {
 	runtimeOnly 'org.postgresql:postgresql'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
-	implementation files('libs/spring-security-oauth2-authorization-server-0.1.0.jar')
+	compile 'org.springframework.security.experimental:spring-security-oauth2-authorization-server:0.1.0'
 	compile 'com.nimbusds:nimbus-jose-jwt'
 	compile 'com.fasterxml.jackson.core:jackson-databind'
 	compile 'org.springframework.security:spring-security-oauth2-core'
 	compile 'org.springframework.security:spring-security-oauth2-jose'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	compile 'org.springframework.boot:spring-boot-starter-thymeleaf'
 }
 
 test {

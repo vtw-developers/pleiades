@@ -17,6 +17,8 @@ package com.vtw.portal.auth.authorization.config;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
+import java.util.Arrays;
+
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.CorsUtils;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 /**
  * @author Joe Grandja
@@ -38,16 +45,57 @@ public class DefaultSecurityConfig {
 
 	@Autowired
 	private DataSource dataSource;
-	
+
 	// formatter:off
 	@Bean
 	SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-		http.authorizeRequests(authorizeRequests -> authorizeRequests.anyRequest().authenticated())
-				.formLogin(withDefaults());
+		http
+		//.cors().and()
+		.csrf().disable()
+				// .authorizeRequests(authorizeRequests ->
+				// authorizeRequests.anyRequest().authenticated())
+				.authorizeRequests()
+				.antMatchers("/auth/login").permitAll()
+				.antMatchers("/doLogin").permitAll()
+				.antMatchers("/login").permitAll()
+				.antMatchers("/pleiades/login").permitAll()
+				// .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
+				.anyRequest().authenticated().and()
+				// .httpBasic(withDefaults())
+				
+//				.csrf()
+//	            .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+//	        .and()
+	        .formLogin()
+				.loginPage("/login").loginProcessingUrl("/doLogin")
+				//.and()
+				.and().logout().clearAuthentication(true)
+				.invalidateHttpSession(true)
+				.logoutSuccessUrl("http://localhost:8080/logout")
+				.deleteCookies("JSESSIONID")
+				.and()
+				.sessionManagement().maximumSessions(1);
+		// .logoutUrl("/logout")
+		// .logoutSuccessUrl("/")
+		// .and().cors();
 		return http.build();
 	}
 	// formatter:on
-	
+
+	//@Bean
+	public CorsConfigurationSource corsConfigurationSource() {
+		CorsConfiguration configuration = new CorsConfiguration();
+		configuration.setAllowedOrigins(Arrays.asList("*"));
+		configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+		configuration.setAllowedHeaders(Arrays.asList("authorization", "content-type", "x-auth-token"));
+		//configuration.addAllowedHeader("*");
+		//configuration.setExposedHeaders(Arrays.asList("x-auth-token"));
+		configuration.applyPermitDefaultValues();
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", configuration);
+		return source;
+	}
+
 	@Bean
 	UserDetailsService users() {
 		return new JdbcUserDetailsManager(dataSource);
@@ -57,4 +105,5 @@ public class DefaultSecurityConfig {
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
+
 }
