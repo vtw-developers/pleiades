@@ -30,7 +30,7 @@ public class PleiadesCenterApplication {
 			systemRepo.save(system);
 			
 			PageRequest pageable = PageRequest.of(0, 10, Sort.by(Arrays.asList(Sort.Order.asc("name"))));
-			Page<IntegrationSystem> systems = systemRepo.findAll(IntegrationSystemSpecs.like("연계", "설명"), pageable);
+			Page<IntegrationSystem> systems = systemRepo.findAll(IntegrationSystemSpecs.filter("연계", "설명"), pageable);
 			System.out.println(systems.getContent());
 		};
 	}

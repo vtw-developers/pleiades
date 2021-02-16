@@ -34,6 +34,6 @@ public class IntegrationSystemController {
 			@RequestParam(required = false) String name, 
 			@RequestParam(required = false) String description,
 			Pageable pageable) {
-		return repository.findAll(IntegrationSystemSpecs.like(name, description), pageable).getContent();
+		return repository.findAll(IntegrationSystemSpecs.filter(name, description), pageable).getContent();
 	}
 }
