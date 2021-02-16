@@ -1,0 +1,25 @@
+server:
+  port: 8070
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://127.0.0.1:5432/portal
+    username: vtw
+    password: vtw123#
+  jpa:
+    show-sql: true
+    generate-ddl: true
+    hibernate:
+      ddl-auto: create-drop
+  security:
+    user:
+      name: blindprayer
+      password: 30539w
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://auth-server:9000
+logging:
+  level:
+    root: info
+    '[com.vtw]': debug
