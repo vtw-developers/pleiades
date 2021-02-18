@@ -16,6 +16,14 @@ public class IntegrationSystem {
 
 	private String description;
 
+	public IntegrationSystem() {
+	}
+	
+	public IntegrationSystem(String name, String description) {
+		this.name = name;
+		this.description = description;
+	}
+
 	public Long getId() {
 		return id;
 	}

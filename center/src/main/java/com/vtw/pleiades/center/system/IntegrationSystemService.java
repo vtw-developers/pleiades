@@ -19,20 +19,20 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Service;
 
-@RestController
-public class IntegrationSystemController {
+@Service
+public class IntegrationSystemService {
 
 	@Autowired
-	private IntegrationSystemService service;
+	private IntegrationSystemRepository repository;
 
-	@GetMapping("/systems")
-	public List<IntegrationSystem> getSystems(Pageable pageable, 
-			@RequestParam(required = false) String name,
-			@RequestParam(required = false) String description) {
-		return service.list(pageable, name, description);
+	public List<IntegrationSystem> list(Pageable pageable, String name, String description) {
+		System.out.println(pageable.getSort());
+		return repository.findAll(IntegrationSystemSpecs.filter(name, description), pageable).getContent();
+	}
+	
+	public IntegrationSystem save(IntegrationSystem system) {
+		return repository.save(system);
 	}
 }
