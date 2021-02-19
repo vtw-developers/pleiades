@@ -21,17 +21,17 @@ public class PleiadesCenterApplication {
 		SpringApplication.run(PleiadesCenterApplication.class, args);
 	}
 
-//	@Bean
-//	public CommandLineRunner run(IntegrationSystemRepository systemRepo) throws Exception {
-//		return (args) -> {
-//			IntegrationSystem system = new IntegrationSystem();
-//			system.setName("테스트 연계시스템");
-//			system.setDescription("설명한다.");
-//			systemRepo.save(system);
-//			
-//			PageRequest pageable = PageRequest.of(0, 10, Sort.by(Arrays.asList(Sort.Order.asc("name"))));
-//			Page<IntegrationSystem> systems = systemRepo.findAll(IntegrationSystemSpecs.filter("연계", "설명"), pageable);
-//			System.out.println(systems.getContent());
-//		};
-//	}
+	@Bean
+	public CommandLineRunner run(IntegrationSystemRepository systemRepo) throws Exception {
+		return (args) -> {
+			for (int i=0; i < 105; i++) {
+			IntegrationSystem system = new IntegrationSystem("테스트 연계시스템" + i, "설명한다.");
+			systemRepo.save(system);
+			}
+			
+			PageRequest pageable = PageRequest.of(0, 10, Sort.by(Arrays.asList(Sort.Order.asc("name"))));
+			Page<IntegrationSystem> systems = systemRepo.findAll(IntegrationSystemSpecs.filter("연계", "설명"), pageable);
+			System.out.println(systems.getContent());
+		};
+	}
 }

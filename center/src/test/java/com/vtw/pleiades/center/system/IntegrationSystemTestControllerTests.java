@@ -10,11 +10,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
@@ -39,7 +41,7 @@ class IntegrationSystemTestControllerTests {
 		system.setId(1L);
 		
 		PageRequest pageable = PageRequest.of(0, 10, Sort.by(new ArrayList<>()));
-		given(service.list(pageable, "테스트 연계", "시스템 설명")).willReturn(Arrays.asList(system));
+		given(service.list(pageable, "테스트 연계", "시스템 설명")).willReturn(new PageImpl<>(Arrays.asList(system), pageable, 1));
 		System.out.println(service.list(pageable, "테스트 연계", "시스템 설명"));
 		final ResultActions actions = mvc
 				.perform(get("/systems?page=0&size=10&name=테스트 연계&description=시스템 설명").contentType(MediaType.APPLICATION_JSON))

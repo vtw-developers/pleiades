@@ -15,9 +15,8 @@
  */
 package com.vtw.pleiades.center.system;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -27,9 +26,8 @@ public class IntegrationSystemService {
 	@Autowired
 	private IntegrationSystemRepository repository;
 
-	public List<IntegrationSystem> list(Pageable pageable, String name, String description) {
-		System.out.println(pageable.getSort());
-		return repository.findAll(IntegrationSystemSpecs.filter(name, description), pageable).getContent();
+	public Page<IntegrationSystem> list(Pageable pageable, String name, String description) {
+		return repository.findAll(IntegrationSystemSpecs.filter(name, description), pageable);
 	}
 	
 	public IntegrationSystem save(IntegrationSystem system) {
