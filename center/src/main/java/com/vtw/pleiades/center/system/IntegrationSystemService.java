@@ -26,11 +26,22 @@ public class IntegrationSystemService {
 	@Autowired
 	private IntegrationSystemRepository repository;
 
-	public Page<IntegrationSystem> list(Pageable pageable, String name, String description) {
+	public Page<IntegrationSystem> getSystems(Pageable pageable, String name, String description) {
 		return repository.findAll(IntegrationSystemSpecs.filter(name, description), pageable);
 	}
 	
-	public IntegrationSystem save(IntegrationSystem system) {
+	public IntegrationSystem getSystem(Long id) {
+		return repository.findById(id).get();
+	}
+	
+	public IntegrationSystem createSystem(IntegrationSystem system) {
 		return repository.save(system);
+	}
+	
+	public IntegrationSystem updateSystem(Long id, IntegrationSystem newSystem) {
+		IntegrationSystem oldSystem = repository.findById(id).orElse(newSystem);
+		oldSystem.setName(newSystem.getName());
+		oldSystem.setDescription(newSystem.getDescription());
+		return repository.save(oldSystem);
 	}
 }
