@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.vtw.pleiades.center.common.web.validation.ValidationResult;
+
 @RestController
 @RequestMapping("/systems")
 public class IntegrationSystemController {
@@ -21,24 +23,35 @@ public class IntegrationSystemController {
 	private IntegrationSystemService service;
 
 	@GetMapping
-	public Page<IntegrationSystem> getSystems(Pageable pageable, 
+	public Page<IntegrationSystem> list(Pageable pageable, 
 			@RequestParam(required = false) String name,
 			@RequestParam(required = false) String description) {
-		return service.getSystems(pageable, name, description);
+		return service.list(pageable, name, description);
 	}
 	
 	@PostMapping
-	public IntegrationSystem createSystem(@RequestBody IntegrationSystem system) {
-		return service.createSystem(system);
+	public IntegrationSystem create(@RequestBody IntegrationSystem system) throws Exception {
+		boolean exist = service.exist(system.getName());
+		if (exist) throw new Exception("Duplicated Name");
+		return service.create(system);
 	}
 	
 	@PutMapping("/{id}")
-	public IntegrationSystem updateSystem(@PathVariable Long id, @RequestBody IntegrationSystem newSystem) {
-		return service.updateSystem(id, newSystem);
+	public IntegrationSystem update(@PathVariable Long id, @RequestBody IntegrationSystem newSystem) {
+		return service.update(id, newSystem);
 	}
 	
 	@DeleteMapping("/{id}")
-	public void deleteSystem(@PathVariable Long id) {
-		service.deleteSystem(id);
+	public void delete(@PathVariable Long id) {
+		service.delete(id);
+	}
+	
+	@PostMapping("/validate")
+	public ValidationResult validate(@RequestBody IntegrationSystem system) {
+		boolean exist = service.exist(system.getName());
+		if (exist) {
+			return ValidationResult.invalid("exist,name");
+		}
+		return ValidationResult.valid();
 	}
 }

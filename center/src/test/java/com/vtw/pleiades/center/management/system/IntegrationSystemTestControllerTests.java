@@ -39,8 +39,8 @@ class IntegrationSystemTestControllerTests {
 		IntegrationSystem system = new IntegrationSystem("테스트 연계시스템", "시스템 설명입니다.");
 		
 		PageRequest pageable = PageRequest.of(0, 10, Sort.by(new ArrayList<>()));
-		given(service.getSystems(pageable, "테스트 연계", "시스템 설명")).willReturn(new PageImpl<>(Arrays.asList(system), pageable, 1));
-		System.out.println(service.getSystems(pageable, "테스트 연계", "시스템 설명"));
+		given(service.list(pageable, "테스트 연계", "시스템 설명")).willReturn(new PageImpl<>(Arrays.asList(system), pageable, 1));
+		System.out.println(service.list(pageable, "테스트 연계", "시스템 설명"));
 		final ResultActions actions = mvc
 				.perform(get("/systems?page=0&size=10&name=테스트 연계&description=시스템 설명").contentType(MediaType.APPLICATION_JSON))
 				.andDo(print());

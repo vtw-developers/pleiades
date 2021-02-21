@@ -15,6 +15,8 @@
  */
 package com.vtw.pleiades.center.management.system;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,7 +28,7 @@ public class IntegrationSystemService {
 	@Autowired
 	private IntegrationSystemRepository repository;
 
-	public Page<IntegrationSystem> getSystems(Pageable pageable, String name, String description) {
+	public Page<IntegrationSystem> list(Pageable pageable, String name, String description) {
 		return repository.findAll(IntegrationSystemSpecs.filter(name, description), pageable);
 	}
 	
@@ -34,18 +36,23 @@ public class IntegrationSystemService {
 		return repository.findById(id).get();
 	}
 	
-	public IntegrationSystem createSystem(IntegrationSystem system) {
+	public IntegrationSystem create(IntegrationSystem system) {
 		return repository.save(system);
 	}
 	
-	public IntegrationSystem updateSystem(Long id, IntegrationSystem newSystem) {
+	public IntegrationSystem update(Long id, IntegrationSystem newSystem) {
 		IntegrationSystem oldSystem = repository.findById(id).orElse(newSystem);
 		oldSystem.setName(newSystem.getName());
 		oldSystem.setDescription(newSystem.getDescription());
 		return repository.save(oldSystem);
 	}
 
-	public void deleteSystem(Long id) {
+	public void delete(Long id) {
 		repository.deleteById(id);
+	}
+	
+	public boolean exist(String name) {
+		List<IntegrationSystem> systems = repository.findByName(name);
+		return systems.size() > 0;
 	}
 }
