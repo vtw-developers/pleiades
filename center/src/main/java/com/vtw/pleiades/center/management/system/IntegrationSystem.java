@@ -1,4 +1,4 @@
-package com.vtw.pleiades.center.system;
+package com.vtw.pleiades.center.management.system;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

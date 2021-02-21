@@ -10,9 +10,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
-import com.vtw.pleiades.center.system.IntegrationSystem;
-import com.vtw.pleiades.center.system.IntegrationSystemRepository;
-import com.vtw.pleiades.center.system.IntegrationSystemSpecs;
+import com.vtw.pleiades.center.management.system.IntegrationSystem;
+import com.vtw.pleiades.center.management.system.IntegrationSystemRepository;
+import com.vtw.pleiades.center.management.system.IntegrationSystemSpecs;
 
 @SpringBootApplication
 public class PleiadesCenterApplication {

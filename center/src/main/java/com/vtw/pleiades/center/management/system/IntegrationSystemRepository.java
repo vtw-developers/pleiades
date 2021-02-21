@@ -1,4 +1,4 @@
-package com.vtw.pleiades.center.system;
+package com.vtw.pleiades.center.management.system;
 
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;

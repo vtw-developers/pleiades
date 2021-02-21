@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.vtw.pleiades.center.system;
+package com.vtw.pleiades.center.management.system;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

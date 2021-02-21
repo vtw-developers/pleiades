@@ -1,4 +1,4 @@
-package com.vtw.pleiades.center.system;
+package com.vtw.pleiades.center.management.system;
 
 import static org.hamcrest.core.Is.is;
 import static org.mockito.BDDMockito.given;
@@ -10,7 +10,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
