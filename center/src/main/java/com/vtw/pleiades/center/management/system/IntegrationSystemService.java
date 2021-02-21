@@ -44,4 +44,8 @@ public class IntegrationSystemService {
 		oldSystem.setDescription(newSystem.getDescription());
 		return repository.save(oldSystem);
 	}
+
+	public void deleteSystem(Long id) {
+		repository.deleteById(id);
+	}
 }
