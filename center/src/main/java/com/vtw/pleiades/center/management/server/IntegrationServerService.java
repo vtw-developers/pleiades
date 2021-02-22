@@ -36,8 +36,8 @@ public class IntegrationServerService {
 	@Autowired
 	private IntegrationSystemRepository systemRepository;
 
-	public Page<IntegrationServerView> list(String name, String description, String systemName, Pageable pageable) {
-		return repository.findByNameContainsAndDescriptionContainsAndSystem_NameContains(name, description, systemName, pageable);
+	public Page<IntegrationServerView> list(String keyword, Pageable pageable) {
+		return repository.findByNameContainsOrSystem_NameContains(keyword, keyword, pageable);
 	}
 	
 	public IntegrationServer get(Long id) {
