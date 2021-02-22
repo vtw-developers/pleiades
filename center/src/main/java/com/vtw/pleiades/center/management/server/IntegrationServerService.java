@@ -17,6 +17,7 @@ package com.vtw.pleiades.center.management.server;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,8 +29,8 @@ public class IntegrationServerService {
 	@Autowired
 	private IntegrationServerRepository repository;
 
-	public Page<IntegrationServerView> list(String name, String description, Pageable pageable) {
-		return repository.findAllByNameContainsAndDescriptionContains(name, description, pageable);
+	public Page<IntegrationServerView> list(String name, String description, String systemName, Pageable pageable) {
+		return repository.findAllByNameContainsAndDescriptionContainsAndSystem_NameContains(name, description, systemName, pageable);
 	}
 	
 	public IntegrationServer get(Long id) {
@@ -52,6 +53,24 @@ public class IntegrationServerService {
 	}
 	
 	public boolean exist(String name) {
+		List<IntegrationServer> systems = repository.findByName(name);
+		return systems.size() > 0;
+	}
+	
+	/**
+	 * 변경 시 서버명 중복검사
+	 * 
+	 * @param id 변경대상 서버ID
+	 * @param name 변경되는 서버명
+	 * @return 이미 존재하는 서버명일 경우 true
+	 */
+	public boolean exist(Long id, String name) {
+		// 서버명을 변경하지 않았을 경우 false를 리턴
+		IntegrationServer oldServer = repository.findById(id).get();
+		if (StringUtils.equals(oldServer.getName(), name)) {
+			return false;
+		}
+		
 		List<IntegrationServer> systems = repository.findByName(name);
 		return systems.size() > 0;
 	}

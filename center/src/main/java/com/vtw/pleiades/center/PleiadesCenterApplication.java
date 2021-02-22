@@ -8,18 +8,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import com.vtw.pleiades.center.management.server.IntegrationServer;
 import com.vtw.pleiades.center.management.server.IntegrationServerRepository;
-import com.vtw.pleiades.center.management.server.IntegrationServerSpecs;
 import com.vtw.pleiades.center.management.system.IntegrationSystem;
 import com.vtw.pleiades.center.management.system.IntegrationSystemRepository;
 
-import th.co.geniustree.springdata.jpa.repository.support.JpaSpecificationExecutorWithProjectionImpl;
-
 @SpringBootApplication
-@EnableJpaRepositories(repositoryBaseClass = JpaSpecificationExecutorWithProjectionImpl.class)
 public class PleiadesCenterApplication {
 
 	public static void main(String[] args) {
@@ -36,7 +31,7 @@ public class PleiadesCenterApplication {
 			serverRepo.save(server);
 			
 			PageRequest pageable = PageRequest.of(0, 10, Sort.by(Arrays.asList(Sort.Order.asc("name"))));
-			System.out.println(serverRepo.findAll(IntegrationServerSpecs.filter("연계", "설명"), pageable)); 
+			System.out.println(serverRepo.findAllByNameContainsAndDescriptionContainsAndSystem_NameContains("연계", "설명", "시스템", pageable)); 
 //			for (int i=0; i < 105; i++) {
 //			IntegrationSystem system = new IntegrationSystem("테스트 연계시스템" + i, "설명한다.");
 //			systemRepo.save(system);

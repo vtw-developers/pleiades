@@ -58,10 +58,6 @@ public class IntegrationServer {
 	public void setSystem(IntegrationSystem system) {
 		this.system = system;
 	}
-	
-	public String getSystemName() {
-		return system.getName();
-	}
 
 	@Override
 	public String toString() {

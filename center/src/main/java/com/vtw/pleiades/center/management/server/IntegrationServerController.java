@@ -23,15 +23,16 @@ public class IntegrationServerController {
 	private IntegrationServerService service;
 
 	@GetMapping
-	public Page<IntegrationServerView> getSystems( 
+	public Page<IntegrationServerView> list( 
 			@RequestParam(required = false, defaultValue = "") String name,
 			@RequestParam(required = false, defaultValue = "") String description,
+			@RequestParam(required = false, defaultValue = "") String systemName,
 			Pageable pageable) {
-		return service.list(name, description, pageable);
+		return service.list(name, description, systemName, pageable);
 	}
 	
 	@PostMapping
-	public ValidationResult createSystem(@RequestBody IntegrationServer server) {
+	public ValidationResult create(@RequestBody IntegrationServer server) {
 		ValidationResult validation = validate(server);
 		if (validation.isValid()) {
 			service.create(server);
@@ -40,8 +41,8 @@ public class IntegrationServerController {
 	}
 	
 	@PutMapping("/{id}")
-	public ValidationResult updateSystem(@PathVariable Long id, @RequestBody IntegrationServer server) {
-		ValidationResult validation = validate(server);
+	public ValidationResult update(@PathVariable Long id, @RequestBody IntegrationServer server) {
+		ValidationResult validation = validate(id, server);
 		if (validation.isValid()) {
 			service.update(id, server);
 		}
@@ -56,6 +57,15 @@ public class IntegrationServerController {
 	@PostMapping("/validate")
 	public ValidationResult validate(@RequestBody IntegrationServer server) {
 		boolean exist = service.exist(server.getName());
+		if (exist) {
+			return ValidationResult.invalid("exist,name");
+		}
+		return ValidationResult.valid();
+	}
+	
+	@PostMapping("/validate/{id}")
+	public ValidationResult validate(@PathVariable Long id, @RequestBody IntegrationServer server) {
+		boolean exist = service.exist(id, server.getName());
 		if (exist) {
 			return ValidationResult.invalid("exist,name");
 		}

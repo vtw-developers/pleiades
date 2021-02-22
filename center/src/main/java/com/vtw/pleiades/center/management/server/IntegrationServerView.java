@@ -9,8 +9,14 @@ public interface IntegrationServerView {
 
 	String getName();
 	
+	String getDescription();
+	
 	@JsonIgnore
 	IntegrationSystem getSystem();
+	
+	default Long getSystemId() {
+		return getSystem().getId();
+	}
 	
 	default String getSystemName() {
 		return getSystem().getName();
