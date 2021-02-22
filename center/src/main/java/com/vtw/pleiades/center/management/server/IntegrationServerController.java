@@ -56,19 +56,11 @@ public class IntegrationServerController {
 	
 	@PostMapping("/validate")
 	public ValidationResult validate(@RequestBody IntegrationServer server) {
-		boolean exist = service.exist(server.getName());
-		if (exist) {
-			return ValidationResult.invalid("exist,name");
-		}
-		return ValidationResult.valid();
+		return service.validate(server);
 	}
 	
 	@PostMapping("/validate/{id}")
 	public ValidationResult validate(@PathVariable Long id, @RequestBody IntegrationServer server) {
-		boolean exist = service.exist(id, server.getName());
-		if (exist) {
-			return ValidationResult.invalid("exist,name");
-		}
-		return ValidationResult.valid();
+		return service.validate(id, server);
 	}
 }

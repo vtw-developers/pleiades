@@ -23,11 +23,18 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.vtw.pleiades.center.common.web.validation.ValidationResult;
+import com.vtw.pleiades.center.management.system.IntegrationSystem;
+import com.vtw.pleiades.center.management.system.IntegrationSystemRepository;
+
 @Service
 public class IntegrationServerService {
 
 	@Autowired
 	private IntegrationServerRepository repository;
+	
+	@Autowired
+	private IntegrationSystemRepository systemRepository;
 
 	public Page<IntegrationServerView> list(String name, String description, String systemName, Pageable pageable) {
 		return repository.findAllByNameContainsAndDescriptionContainsAndSystem_NameContains(name, description, systemName, pageable);
@@ -42,14 +49,64 @@ public class IntegrationServerService {
 	}
 	
 	public IntegrationServer update(Long id, IntegrationServer newServer) {
-		IntegrationServer oldSystem = repository.findById(id).orElse(newServer);
-		oldSystem.setName(newServer.getName());
-		oldSystem.setDescription(newServer.getDescription());
-		return repository.save(oldSystem);
+		IntegrationServer oldServer = repository.findById(id).orElse(newServer);
+		oldServer.setName(newServer.getName());
+		oldServer.setDescription(newServer.getDescription());
+		
+		IntegrationSystem newSystem = systemRepository.findById(newServer.getSystem().getId()).get();
+		oldServer.setSystem(newSystem);
+		
+		return repository.save(oldServer);
 	}
 	
 	public void delete(Long id) {
 		repository.deleteById(id);
+	}
+	
+	public ValidationResult validate(IntegrationServer server) {
+		ValidationResult hasParent = validateHasParent(server);
+		if (hasParent.isInvalid()) {
+			return hasParent;
+		}
+		ValidationResult notExistName = validateNotExistName(server);
+		return notExistName;
+	}
+	
+	public ValidationResult validate(Long id, IntegrationServer server) {
+		ValidationResult hasParent = validateHasParent(server);
+		if (hasParent.isInvalid()) {
+			return hasParent;
+		}
+		ValidationResult notExistName = validateNotExistName(id, server);
+		return notExistName;
+	}
+	
+	public ValidationResult validateHasParent(IntegrationServer server) {
+		if (server.getSystem().getId() == null) {
+			return ValidationResult.invalid("noParent,system");
+		}
+		
+		boolean exist = systemRepository.existsById(server.getSystem().getId());
+		if (!exist) {
+			return ValidationResult.invalid("noParent,system");
+		}
+		return ValidationResult.valid();
+	}
+	
+	public ValidationResult validateNotExistName(IntegrationServer server) {
+		boolean exist = exist(server.getName());
+		if (exist) {
+			return ValidationResult.invalid("exist,name");
+		}
+		return ValidationResult.valid();
+	}
+	
+	public ValidationResult validateNotExistName(Long id, IntegrationServer server) {
+		boolean exist = exist(id, server.getName());
+		if (exist) {
+			return ValidationResult.invalid("exist,name");
+		}
+		return ValidationResult.valid();
 	}
 	
 	public boolean exist(String name) {
