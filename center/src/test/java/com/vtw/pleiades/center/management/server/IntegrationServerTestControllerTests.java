@@ -8,7 +8,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
@@ -22,6 +21,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import com.vtw.pleiades.center.management.system.IntegrationSystem;
+
 @WebMvcTest(IntegrationServerController.class)
 class IntegrationServerTestControllerTests {
 
@@ -34,17 +35,38 @@ class IntegrationServerTestControllerTests {
 	@MockBean
 	private IntegrationServerRepository repository;
 	
-//	@Test
-//	void getListTest() throws Exception {
-//		IntegrationServer server = new IntegrationServer("테스트 연계시스템", "시스템 설명입니다.");
-//		
-//		PageRequest pageable = PageRequest.of(0, 10, Sort.by(new ArrayList<>()));
-//		given(service.list(pageable, "테스트 연계", "시스템 설명")).willReturn(new PageImpl<>(Arrays.asList(server), pageable, 1));
-//		System.out.println(service.list(pageable, "테스트 연계", "시스템 설명"));
-//		final ResultActions actions = mvc
-//				.perform(get("/servers?page=0&size=10&name=테스트 연계&description=시스템 설명").contentType(MediaType.APPLICATION_JSON))
-//				.andDo(print());
-//		actions.andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON))
-//				.andExpect(jsonPath("$[0].name", is("테스트 연계시스템"))).andDo(print());
-//	}
+	@Test
+	void testList() throws Exception {
+		IntegrationSystem system = new IntegrationSystem("테스트 연계시스템", "시스템 설명입니다.");
+		IntegrationServer server = new IntegrationServer(system, "테스트 연계서버", "서버 설명입니다.");
+		
+		PageRequest pageable = PageRequest.of(0, 10, Sort.unsorted());
+		given(service.list("서버", "서버 설명", "시스템", pageable)).willReturn(new PageImpl<>(Arrays.asList(new IntegrationServerView() {
+			
+			@Override
+			public IntegrationSystem getSystem() {
+				return server.getSystem();
+			}
+			
+			@Override
+			public String getName() {
+				return server.getName();
+			}
+			
+			@Override
+			public Long getId() {
+				return server.getId();
+			}
+			
+			@Override
+			public String getDescription() {
+				return server.getDescription();
+			}
+		}), pageable, 1));
+		final ResultActions actions = mvc
+				.perform(get("/servers?page=0&size=10&name=서버&description=서버 설명&systemName=시스템").contentType(MediaType.APPLICATION_JSON))
+				.andDo(print());
+		actions.andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON))
+				.andExpect(jsonPath("$.content[0].name", is("테스트 연계서버"))).andDo(print());
+	}
 }

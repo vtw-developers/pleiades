@@ -37,7 +37,7 @@ public class IntegrationServerService {
 	private IntegrationSystemRepository systemRepository;
 
 	public Page<IntegrationServerView> list(String name, String description, String systemName, Pageable pageable) {
-		return repository.findAllByNameContainsAndDescriptionContainsAndSystem_NameContains(name, description, systemName, pageable);
+		return repository.findByNameContainsAndDescriptionContainsAndSystem_NameContains(name, description, systemName, pageable);
 	}
 	
 	public IntegrationServer get(Long id) {

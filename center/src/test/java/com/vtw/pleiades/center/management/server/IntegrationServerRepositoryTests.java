@@ -18,13 +18,17 @@ package com.vtw.pleiades.center.management.server;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.Arrays;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
 import com.vtw.pleiades.center.management.system.IntegrationSystem;
-import com.vtw.pleiades.center.management.system.IntegrationSystemRepository;
 
 @DataJpaTest
 public class IntegrationServerRepositoryTests {
@@ -48,16 +52,19 @@ public class IntegrationServerRepositoryTests {
 		assertThat(foundServer.getName()).isEqualTo("테스트 연계서버");
 	}
 	
-//	@Test
-//	public void testFindAllSimple() {
-//		IntegrationServer server = new IntegrationServer("테스트 연계시스템", "시스템 설명입니다.");
-//		entityManager.persist(server);
-//
-//		PageRequest pageable = PageRequest.of(0, 10, Sort.by(Arrays.asList(Sort.Order.asc("name"))));
-//		Page<IntegrationServer> servers = repository.findAll(IntegrationServerSpecs.filter("연계", "설명"), pageable);
-//
-//		assertThat(servers).extracting(IntegrationServer::getId).containsOnly(server.getId());
-//	}
+	@Test
+	public void testFindByFilterSimple() {
+		IntegrationSystem system = new IntegrationSystem("테스트 연계시스템", "시스템 설명입니다.");
+		entityManager.persist(system);
+		
+		IntegrationServer server = new IntegrationServer(system, "테스트 연계서버", "서버 설명입니다.");
+		entityManager.persist(server);
+
+		PageRequest pageable = PageRequest.of(0, 10, Sort.by(Arrays.asList(Sort.Order.asc("name"))));
+		Page<IntegrationServerView> servers = repository.findByNameContainsAndDescriptionContainsAndSystem_NameContains("서버", "설명", "시스템", pageable);
+		
+		assertThat(servers).extracting(IntegrationServerView::getName).containsOnly(server.getName());
+	}
 //	
 //	@Test
 //	public void testFindAllFiltering() {

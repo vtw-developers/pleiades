@@ -35,7 +35,7 @@ class IntegrationSystemTestControllerTests {
 	private IntegrationSystemRepository repository;
 	
 	@Test
-	void getListTest() throws Exception {
+	void testList() throws Exception {
 		IntegrationSystem system = new IntegrationSystem("테스트 연계시스템", "시스템 설명입니다.");
 		
 		PageRequest pageable = PageRequest.of(0, 10, Sort.by(new ArrayList<>()));
@@ -45,6 +45,6 @@ class IntegrationSystemTestControllerTests {
 				.perform(get("/systems?page=0&size=10&name=테스트 연계&description=시스템 설명").contentType(MediaType.APPLICATION_JSON))
 				.andDo(print());
 		actions.andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON))
-				.andExpect(jsonPath("$[0].name", is("테스트 연계시스템"))).andDo(print());
+				.andExpect(jsonPath("$.content[0].name", is("테스트 연계시스템"))).andDo(print());
 	}
 }
