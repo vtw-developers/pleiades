@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.vtw.pleiades.center.management.system;
+package com.vtw.pleiades.center.management.server;
 
 import java.util.List;
 
@@ -23,36 +23,36 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
-public class IntegrationSystemService {
+public class IntegrationServerService {
 
 	@Autowired
-	private IntegrationSystemRepository repository;
-	
-	public Page<IntegrationSystem> list(Pageable pageable, String name, String description) {
-		return repository.findAll(IntegrationSystemSpecs.filter(name, description), pageable);
+	private IntegrationServerRepository repository;
+
+	public Page<IntegrationServerView> list(String name, String description, Pageable pageable) {
+		return repository.findAllByNameContainsAndDescriptionContains(name, description, pageable);
 	}
 	
-	public IntegrationSystem getSystem(Long id) {
+	public IntegrationServer get(Long id) {
 		return repository.findById(id).get();
 	}
 	
-	public IntegrationSystem create(IntegrationSystem system) {
-		return repository.save(system);
+	public IntegrationServer create(IntegrationServer server) {
+		return repository.save(server);
 	}
 	
-	public IntegrationSystem update(Long id, IntegrationSystem newSystem) {
-		IntegrationSystem oldSystem = repository.findById(id).orElse(newSystem);
-		oldSystem.setName(newSystem.getName());
-		oldSystem.setDescription(newSystem.getDescription());
+	public IntegrationServer update(Long id, IntegrationServer newServer) {
+		IntegrationServer oldSystem = repository.findById(id).orElse(newServer);
+		oldSystem.setName(newServer.getName());
+		oldSystem.setDescription(newServer.getDescription());
 		return repository.save(oldSystem);
 	}
-
+	
 	public void delete(Long id) {
 		repository.deleteById(id);
 	}
 	
 	public boolean exist(String name) {
-		List<IntegrationSystem> systems = repository.findByName(name);
+		List<IntegrationServer> systems = repository.findByName(name);
 		return systems.size() > 0;
 	}
 }

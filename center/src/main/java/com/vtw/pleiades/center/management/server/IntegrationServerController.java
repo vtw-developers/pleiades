@@ -1,4 +1,4 @@
-package com.vtw.pleiades.center.management.system;
+package com.vtw.pleiades.center.management.server;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,33 +16,34 @@ import org.springframework.web.bind.annotation.RestController;
 import com.vtw.pleiades.center.common.web.validation.ValidationResult;
 
 @RestController
-@RequestMapping("/systems")
-public class IntegrationSystemController {
+@RequestMapping("/servers")
+public class IntegrationServerController {
 
 	@Autowired
-	private IntegrationSystemService service;
+	private IntegrationServerService service;
 
 	@GetMapping
-	public Page<IntegrationSystem> list(Pageable pageable, 
-			@RequestParam(required = false) String name,
-			@RequestParam(required = false) String description) {
-		return service.list(pageable, name, description);
+	public Page<IntegrationServerView> getSystems( 
+			@RequestParam(required = false, defaultValue = "") String name,
+			@RequestParam(required = false, defaultValue = "") String description,
+			Pageable pageable) {
+		return service.list(name, description, pageable);
 	}
 	
 	@PostMapping
-	public ValidationResult create(@RequestBody IntegrationSystem system) throws Exception {
-		ValidationResult validation = validate(system);
+	public ValidationResult createSystem(@RequestBody IntegrationServer server) {
+		ValidationResult validation = validate(server);
 		if (validation.isValid()) {
-			service.create(system);
+			service.create(server);
 		}
 		return validation;
 	}
 	
 	@PutMapping("/{id}")
-	public ValidationResult update(@PathVariable Long id, @RequestBody IntegrationSystem system) {
-		ValidationResult validation = validate(system);
+	public ValidationResult updateSystem(@PathVariable Long id, @RequestBody IntegrationServer server) {
+		ValidationResult validation = validate(server);
 		if (validation.isValid()) {
-			service.update(id, system);
+			service.update(id, server);
 		}
 		return validation;
 	}
@@ -53,8 +54,8 @@ public class IntegrationSystemController {
 	}
 	
 	@PostMapping("/validate")
-	public ValidationResult validate(@RequestBody IntegrationSystem system) {
-		boolean exist = service.exist(system.getName());
+	public ValidationResult validate(@RequestBody IntegrationServer server) {
+		boolean exist = service.exist(server.getName());
 		if (exist) {
 			return ValidationResult.invalid("exist,name");
 		}

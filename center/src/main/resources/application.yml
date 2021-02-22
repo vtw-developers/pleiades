@@ -24,4 +24,5 @@ spring:
 logging:
   level:
     root: info
+    '[org.hibernate.type]': info
     '[com.vtw]': debug
