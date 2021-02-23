@@ -37,7 +37,7 @@ public class IntegrationServerService {
 	private IntegrationSystemRepository systemRepository;
 
 	public Page<IntegrationServerView> list(String keyword, Pageable pageable) {
-		return repository.findByNameContainsOrSystem_NameContains(keyword, keyword, pageable);
+		return repository.findAllByNameContainsOrSystem_NameContains(keyword, keyword, pageable);
 	}
 	
 	public IntegrationServer get(Long id) {
@@ -110,7 +110,7 @@ public class IntegrationServerService {
 	}
 	
 	public boolean exist(String name) {
-		List<IntegrationServer> systems = repository.findByName(name);
+		List<IntegrationServer> systems = repository.findAllByName(name);
 		return systems.size() > 0;
 	}
 	
@@ -128,7 +128,7 @@ public class IntegrationServerService {
 			return false;
 		}
 		
-		List<IntegrationServer> systems = repository.findByName(name);
+		List<IntegrationServer> systems = repository.findAllByName(name);
 		return systems.size() > 0;
 	}
 }

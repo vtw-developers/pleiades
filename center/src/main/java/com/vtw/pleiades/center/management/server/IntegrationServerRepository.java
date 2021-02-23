@@ -9,9 +9,9 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 
 public interface IntegrationServerRepository extends PagingAndSortingRepository<IntegrationServer, Long>, JpaSpecificationExecutor<IntegrationServerView> {
 	
-	Page<IntegrationServerView> findByNameContainsOrSystem_NameContains(String name, String systemName, Pageable pageable);
+	Page<IntegrationServerView> findAllByNameContainsOrSystem_NameContains(String name, String systemName, Pageable pageable);
 	
-	Page<IntegrationServerView> findByNameContainsAndDescriptionContainsAndSystem_NameContains(String name, String description, String systemName, Pageable pageable);
+	Page<IntegrationServerView> findAllByNameContainsAndDescriptionContainsAndSystem_NameContains(String name, String description, String systemName, Pageable pageable);
 	
-	List<IntegrationServer> findByName(String name);
+	List<IntegrationServer> findAllByName(String name);
 }

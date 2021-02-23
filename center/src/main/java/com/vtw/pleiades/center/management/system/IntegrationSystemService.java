@@ -17,10 +17,14 @@ package com.vtw.pleiades.center.management.system;
 
 import java.util.List;
 
+import org.apache.commons.collections4.IterableUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import com.vtw.pleiades.center.management.server.IntegrationServer;
+import com.vtw.pleiades.center.management.server.IntegrationServerView;
 
 @Service
 public class IntegrationSystemService {
@@ -52,7 +56,15 @@ public class IntegrationSystemService {
 	}
 	
 	public boolean exist(String name) {
-		List<IntegrationSystem> systems = repository.findByName(name);
+		List<IntegrationSystem> systems = repository.findAllByName(name);
 		return systems.size() > 0;
+	}
+	
+	public List<IntegrationSystem> findAll() {
+		return IterableUtils.toList(repository.findAll());
+	}
+
+	public List<IntegrationServer> getServers(Long id) {
+		return repository.findById(id).get().getServers();
 	}
 }

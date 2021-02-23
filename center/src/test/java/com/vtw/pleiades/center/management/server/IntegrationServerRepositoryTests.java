@@ -61,7 +61,7 @@ public class IntegrationServerRepositoryTests {
 		entityManager.persist(server);
 
 		PageRequest pageable = PageRequest.of(0, 10, Sort.by(Arrays.asList(Sort.Order.asc("name"))));
-		Page<IntegrationServerView> servers = repository.findByNameContainsAndDescriptionContainsAndSystem_NameContains("서버", "설명", "시스템", pageable);
+		Page<IntegrationServerView> servers = repository.findAllByNameContainsAndDescriptionContainsAndSystem_NameContains("서버", "설명", "시스템", pageable);
 		
 		assertThat(servers).extracting(IntegrationServerView::getName).containsOnly(server.getName());
 	}

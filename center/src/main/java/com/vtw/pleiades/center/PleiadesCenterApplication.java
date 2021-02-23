@@ -31,7 +31,7 @@ public class PleiadesCenterApplication {
 			serverRepo.save(server);
 			
 			PageRequest pageable = PageRequest.of(0, 10, Sort.by(Arrays.asList(Sort.Order.asc("name"))));
-			System.out.println(serverRepo.findByNameContainsAndDescriptionContainsAndSystem_NameContains("연계", "설명", "시스템", pageable)); 
+			System.out.println(serverRepo.findAllByNameContainsAndDescriptionContainsAndSystem_NameContains("연계", "설명", "시스템", pageable)); 
 //			for (int i=0; i < 105; i++) {
 //			IntegrationSystem system = new IntegrationSystem("테스트 연계시스템" + i, "설명한다.");
 //			systemRepo.save(system);

@@ -41,7 +41,7 @@ class IntegrationServerTestControllerTests {
 		IntegrationServer server = new IntegrationServer(system, "테스트 연계서버", "서버 설명입니다.");
 		
 		PageRequest pageable = PageRequest.of(0, 10, Sort.unsorted());
-		given(service.list("서버", "서버 설명", "시스템", pageable)).willReturn(new PageImpl<>(Arrays.asList(new IntegrationServerView() {
+		given(service.list("서버", pageable)).willReturn(new PageImpl<>(Arrays.asList(new IntegrationServerView() {
 			
 			@Override
 			public IntegrationSystem getSystem() {

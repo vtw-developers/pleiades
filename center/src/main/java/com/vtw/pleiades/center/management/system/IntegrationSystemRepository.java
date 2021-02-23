@@ -7,5 +7,5 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 
 public interface IntegrationSystemRepository extends PagingAndSortingRepository<IntegrationSystem, Long>, JpaSpecificationExecutor<IntegrationSystem> {
 	
-	List<IntegrationSystem> findByName(String name);
+	List<IntegrationSystem> findAllByName(String name);
 }

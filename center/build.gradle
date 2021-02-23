@@ -25,6 +25,11 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 	//compile 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
 	implementation group: 'org.apache.commons', name: 'commons-lang3'
+	// https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
+// https://mvnrepository.com/artifact/org.apache.commons/commons-collections4
+implementation group: 'org.apache.commons', name: 'commons-collections4', version: '4.4'
+
+	
 }
 
 test {

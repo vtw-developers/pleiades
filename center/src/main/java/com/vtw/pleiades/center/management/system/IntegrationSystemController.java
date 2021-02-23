@@ -1,5 +1,7 @@
 package com.vtw.pleiades.center.management.system;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.vtw.pleiades.center.common.web.validation.ValidationResult;
+import com.vtw.pleiades.center.management.server.IntegrationServer;
 
 @RestController
 @RequestMapping("/systems")
@@ -59,5 +62,15 @@ public class IntegrationSystemController {
 			return ValidationResult.invalid("exist,name");
 		}
 		return ValidationResult.valid();
+	}
+	
+	@GetMapping("/all")
+	public List<IntegrationSystem> findAll() {
+		return service.findAll();
+	}
+	
+	@GetMapping("/{id}/servers")
+	public List<IntegrationServer> getServers(@PathVariable Long id) {
+		return service.getServers(id);
 	}
 }
