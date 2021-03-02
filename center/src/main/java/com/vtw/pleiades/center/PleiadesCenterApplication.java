@@ -9,6 +9,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
+import com.vtw.pleiades.center.management.agent.Agent;
+import com.vtw.pleiades.center.management.agent.AgentRepository;
+import com.vtw.pleiades.center.management.route.Route;
+import com.vtw.pleiades.center.management.route.RouteRepository;
 import com.vtw.pleiades.center.management.server.IntegrationServer;
 import com.vtw.pleiades.center.management.server.IntegrationServerRepository;
 import com.vtw.pleiades.center.management.system.IntegrationSystem;
@@ -22,7 +26,11 @@ public class PleiadesCenterApplication {
 	}
 
 	@Bean
-	public CommandLineRunner run(IntegrationSystemRepository systemRepo, IntegrationServerRepository serverRepo) throws Exception {
+	public CommandLineRunner run(
+			IntegrationSystemRepository systemRepo, 
+			IntegrationServerRepository serverRepo, 
+			AgentRepository agentRepository,
+			RouteRepository routeRepository) throws Exception {
 		return (args) -> {
 			IntegrationSystem system = new IntegrationSystem("테스트 연계시스템", "시스템 설명입니다.");
 			systemRepo.save(system);
@@ -30,8 +38,17 @@ public class PleiadesCenterApplication {
 			IntegrationServer server = new IntegrationServer(system, "테스트 연계서버", "서버 설명입니다.");
 			serverRepo.save(server);
 			
-			PageRequest pageable = PageRequest.of(0, 10, Sort.by(Arrays.asList(Sort.Order.asc("name"))));
-			System.out.println(serverRepo.findAllByNameContainsAndDescriptionContainsAndSystem_NameContains("연계", "설명", "시스템", pageable)); 
+			Agent agent = new Agent(server, "테스트 에이전트", "에이전트 설명입니다.");
+			agentRepository.save(agent);
+			
+			Route route = new Route(agent, "테스트 라우트", "라우트 설명입니다.");
+			routeRepository.save(route);
+			
+//			PageRequest pageable = PageRequest.of(0, 10, Sort.by(Arrays.asList(Sort.Order.asc("name"))));
+//			System.out.println(serverRepo.findAllByNameContainsAndDescriptionContainsAndSystem_NameContains("연계", "설명", "시스템", pageable));
+			
+			
+			
 //			for (int i=0; i < 105; i++) {
 //			IntegrationSystem system = new IntegrationSystem("테스트 연계시스템" + i, "설명한다.");
 //			systemRepo.save(system);

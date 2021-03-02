@@ -13,24 +13,15 @@ repositories {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-data-rest'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	//implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.apache.camel.springboot:camel-spring-boot-starter:3.8.0'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'com.h2database:h2'
-	runtimeOnly 'org.postgresql:postgresql'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'org.springframework.security:spring-security-test'
-	//compile 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
 	implementation group: 'org.apache.commons', name: 'commons-lang3'
-	// https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
-// https://mvnrepository.com/artifact/org.apache.commons/commons-collections4
 implementation group: 'org.apache.commons', name: 'commons-collections4', version: '4.4'
 implementation 'org.apache.camel.springboot:camel-kafka-starter:3.8.0'
-// https://mvnrepository.com/artifact/org.apache.camel/camel-endpointdsl
 implementation group: 'org.apache.camel', name: 'camel-endpointdsl', version: '3.8.0'
+// https://mvnrepository.com/artifact/org.apache.camel.springboot/camel-jackson-starter
+implementation group: 'org.apache.camel.springboot', name: 'camel-jackson-starter', version: '3.8.0'
 
 	
 }
