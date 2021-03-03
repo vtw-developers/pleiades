@@ -34,7 +34,7 @@ public class IntegrationSystemController {
 	
 	@PostMapping
 	public ValidationResult create(@RequestBody IntegrationSystem system) throws Exception {
-		ValidationResult validation = validate(system);
+		ValidationResult validation = service.validate(system);
 		if (validation.isValid()) {
 			service.create(system);
 		}
@@ -43,7 +43,7 @@ public class IntegrationSystemController {
 	
 	@PutMapping("/{id}")
 	public ValidationResult update(@PathVariable Long id, @RequestBody IntegrationSystem system) {
-		ValidationResult validation = validate(system);
+		ValidationResult validation = service.validate(id, system);
 		if (validation.isValid()) {
 			service.update(id, system);
 		}
@@ -57,11 +57,12 @@ public class IntegrationSystemController {
 	
 	@PostMapping("/validate")
 	public ValidationResult validate(@RequestBody IntegrationSystem system) {
-		boolean exist = service.exist(system.getName());
-		if (exist) {
-			return ValidationResult.invalid("exist,name");
-		}
-		return ValidationResult.valid();
+		return service.validate(system);
+	}
+	
+	@PostMapping("/validate/{id}")
+	public ValidationResult validate(@PathVariable Long id, @RequestBody IntegrationSystem system) {
+		return service.validate(id, system);
 	}
 	
 	@GetMapping("/all")

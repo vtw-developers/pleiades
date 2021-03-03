@@ -44,6 +44,16 @@ public class IntegrationServerService {
 		return repository.findById(id).get();
 	}
 	
+	public void setSystemId(IntegrationServer server) {
+		IntegrationSystem system = server.getSystem();
+		if (system.getId() == null && system.getName() != null) {
+			List<IntegrationSystem> systems = systemRepository.findAllByName(system.getName());
+			if (systems.size() > 0) {
+				server.setSystem(systems.get(0));
+			}
+		}
+	}
+	
 	public IntegrationServer create(IntegrationServer server) {
 		return repository.save(server);
 	}
@@ -82,13 +92,13 @@ public class IntegrationServerService {
 	}
 	
 	public ValidationResult validateHasParent(IntegrationServer server) {
-		if (server.getSystem().getId() == null) {
-			return ValidationResult.invalid("noParent,system");
+		if (server.getSystem() == null || server.getSystem().getId() == null) {
+			return ValidationResult.invalid("orphan,system");
 		}
 		
 		boolean exist = systemRepository.existsById(server.getSystem().getId());
 		if (!exist) {
-			return ValidationResult.invalid("noParent,system");
+			return ValidationResult.invalid("orphan,system");
 		}
 		return ValidationResult.valid();
 	}
@@ -110,8 +120,8 @@ public class IntegrationServerService {
 	}
 	
 	public boolean exist(String name) {
-		List<IntegrationServer> systems = repository.findAllByName(name);
-		return systems.size() > 0;
+		List<IntegrationServer> servers = repository.findAllByName(name);
+		return servers.size() > 0;
 	}
 	
 	/**
@@ -128,7 +138,7 @@ public class IntegrationServerService {
 			return false;
 		}
 		
-		List<IntegrationServer> systems = repository.findAllByName(name);
-		return systems.size() > 0;
+		List<IntegrationServer> servers = repository.findAllByName(name);
+		return servers.size() > 0;
 	}
 }

@@ -1,7 +1,5 @@
 package com.vtw.pleiades.center.management.server;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,7 +31,8 @@ public class IntegrationServerController {
 	
 	@PostMapping
 	public ValidationResult create(@RequestBody IntegrationServer server) {
-		ValidationResult validation = validate(server);
+		service.setSystemId(server);
+		ValidationResult validation = service.validate(server);
 		if (validation.isValid()) {
 			service.create(server);
 		}
@@ -42,7 +41,8 @@ public class IntegrationServerController {
 	
 	@PutMapping("/{id}")
 	public ValidationResult update(@PathVariable Long id, @RequestBody IntegrationServer server) {
-		ValidationResult validation = validate(id, server);
+		service.setSystemId(server);
+		ValidationResult validation = service.validate(id, server);
 		if (validation.isValid()) {
 			service.update(id, server);
 		}
