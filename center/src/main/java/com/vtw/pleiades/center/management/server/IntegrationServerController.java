@@ -31,36 +31,16 @@ public class IntegrationServerController {
 	
 	@PostMapping
 	public ValidationResult create(@RequestBody IntegrationServer server) {
-		service.setSystemId(server);
-		ValidationResult validation = service.validate(server);
-		if (validation.isValid()) {
-			service.create(server);
-		}
-		return validation;
+		return service.createWithValidation(server);
 	}
 	
 	@PutMapping("/{id}")
 	public ValidationResult update(@PathVariable Long id, @RequestBody IntegrationServer server) {
-		service.setSystemId(server);
-		ValidationResult validation = service.validate(id, server);
-		if (validation.isValid()) {
-			service.update(id, server);
-		}
-		return validation;
+		return service.updateWithValidation(id, server);
 	}
 	
 	@DeleteMapping("/{id}")
 	public void delete(@PathVariable Long id) {
 		service.delete(id);
-	}
-	
-	@PostMapping("/validate")
-	public ValidationResult validate(@RequestBody IntegrationServer server) {
-		return service.validate(server);
-	}
-	
-	@PostMapping("/validate/{id}")
-	public ValidationResult validate(@PathVariable Long id, @RequestBody IntegrationServer server) {
-		return service.validate(id, server);
 	}
 }

@@ -17,7 +17,6 @@ package com.vtw.pleiades.center.management.server;
 
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -35,6 +34,9 @@ public class IntegrationServerService {
 	
 	@Autowired
 	private IntegrationSystemRepository systemRepository;
+	
+	@Autowired
+	private IntegrationServerValidator validator;
 
 	public Page<IntegrationServerView> list(String keyword, Pageable pageable) {
 		return repository.findAllByNameContainsOrSystem_NameContains(keyword, keyword, pageable);
@@ -44,14 +46,26 @@ public class IntegrationServerService {
 		return repository.findById(id).get();
 	}
 	
-	public void setSystemId(IntegrationServer server) {
-		IntegrationSystem system = server.getSystem();
-		if (system.getId() == null && system.getName() != null) {
-			List<IntegrationSystem> systems = systemRepository.findAllByName(system.getName());
-			if (systems.size() > 0) {
-				server.setSystem(systems.get(0));
-			}
+	public ValidationResult createWithValidation(IntegrationServer server) {
+		setSystemByName(server);
+		ValidationResult validation = validator.validate(server);
+		if (validation.isValid()) {
+			create(server);
 		}
+		return validation;
+	}
+	
+	public ValidationResult updateWithValidation(Long id, IntegrationServer server) {
+		setSystemByName(server);
+		ValidationResult validation = validator.validate(id, server);
+		if (validation.isValid()) {
+			update(id, server);
+		}
+		return validation;
+	}
+	
+	public void delete(Long id) {
+		repository.deleteById(id);
 	}
 	
 	public IntegrationServer create(IntegrationServer server) {
@@ -69,76 +83,13 @@ public class IntegrationServerService {
 		return repository.save(oldServer);
 	}
 	
-	public void delete(Long id) {
-		repository.deleteById(id);
-	}
-	
-	public ValidationResult validate(IntegrationServer server) {
-		ValidationResult hasParent = validateHasParent(server);
-		if (hasParent.isInvalid()) {
-			return hasParent;
+	private void setSystemByName(IntegrationServer server) {
+		IntegrationSystem system = server.getSystem();
+		if (system.getId() == null && system.getName() != null) {
+			List<IntegrationSystem> systems = systemRepository.findAllByName(system.getName());
+			if (systems.size() > 0) {
+				server.setSystem(systems.get(0));
+			}
 		}
-		ValidationResult notExistName = validateNotExistName(server);
-		return notExistName;
-	}
-	
-	public ValidationResult validate(Long id, IntegrationServer server) {
-		ValidationResult hasParent = validateHasParent(server);
-		if (hasParent.isInvalid()) {
-			return hasParent;
-		}
-		ValidationResult notExistName = validateNotExistName(id, server);
-		return notExistName;
-	}
-	
-	public ValidationResult validateHasParent(IntegrationServer server) {
-		if (server.getSystem() == null || server.getSystem().getId() == null) {
-			return ValidationResult.invalid("orphan,system");
-		}
-		
-		boolean exist = systemRepository.existsById(server.getSystem().getId());
-		if (!exist) {
-			return ValidationResult.invalid("orphan,system");
-		}
-		return ValidationResult.valid();
-	}
-	
-	public ValidationResult validateNotExistName(IntegrationServer server) {
-		boolean exist = exist(server.getName());
-		if (exist) {
-			return ValidationResult.invalid("exist,name");
-		}
-		return ValidationResult.valid();
-	}
-	
-	public ValidationResult validateNotExistName(Long id, IntegrationServer server) {
-		boolean exist = exist(id, server.getName());
-		if (exist) {
-			return ValidationResult.invalid("exist,name");
-		}
-		return ValidationResult.valid();
-	}
-	
-	public boolean exist(String name) {
-		List<IntegrationServer> servers = repository.findAllByName(name);
-		return servers.size() > 0;
-	}
-	
-	/**
-	 * 변경 시 서버명 중복검사
-	 * 
-	 * @param id 변경대상 서버ID
-	 * @param name 변경되는 서버명
-	 * @return 이미 존재하는 서버명일 경우 true
-	 */
-	public boolean exist(Long id, String name) {
-		// 서버명을 변경하지 않았을 경우 false를 리턴
-		IntegrationServer oldServer = repository.findById(id).get();
-		if (StringUtils.equals(oldServer.getName(), name)) {
-			return false;
-		}
-		
-		List<IntegrationServer> servers = repository.findAllByName(name);
-		return servers.size() > 0;
 	}
 }

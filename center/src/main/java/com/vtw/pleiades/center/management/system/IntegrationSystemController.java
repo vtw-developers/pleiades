@@ -34,40 +34,22 @@ public class IntegrationSystemController {
 	
 	@PostMapping
 	public ValidationResult create(@RequestBody IntegrationSystem system) throws Exception {
-		ValidationResult validation = service.validate(system);
-		if (validation.isValid()) {
-			service.create(system);
-		}
-		return validation;
+		return service.createWithValidation(system);
 	}
 	
 	@PutMapping("/{id}")
 	public ValidationResult update(@PathVariable Long id, @RequestBody IntegrationSystem system) {
-		ValidationResult validation = service.validate(id, system);
-		if (validation.isValid()) {
-			service.update(id, system);
-		}
-		return validation;
+		return service.updateWithValidation(id, system);
 	}
 	
 	@DeleteMapping("/{id}")
 	public void delete(@PathVariable Long id) {
 		service.delete(id);
 	}
-	
-	@PostMapping("/validate")
-	public ValidationResult validate(@RequestBody IntegrationSystem system) {
-		return service.validate(system);
-	}
-	
-	@PostMapping("/validate/{id}")
-	public ValidationResult validate(@PathVariable Long id, @RequestBody IntegrationSystem system) {
-		return service.validate(id, system);
-	}
-	
+
 	@GetMapping("/all")
-	public List<IntegrationSystem> findAll() {
-		return service.findAll();
+	public List<IntegrationSystem> listAll() {
+		return service.listAll();
 	}
 	
 	@GetMapping("/{id}/servers")
