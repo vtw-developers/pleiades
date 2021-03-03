@@ -25,8 +25,10 @@ public class IntegrationServerController {
 	@GetMapping
 	public Page<IntegrationServerView> list( 
 			@RequestParam(required = false, defaultValue = "") String keyword,
+			@RequestParam(required = false, defaultValue = "") String name,
+			@RequestParam(required = false, defaultValue = "") String systemName,
 			Pageable pageable) {
-		return service.list(keyword, pageable);
+		return service.list(keyword, name, systemName, pageable);
 	}
 	
 	@PostMapping

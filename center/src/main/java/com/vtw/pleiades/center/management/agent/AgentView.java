@@ -1,7 +1,7 @@
 package com.vtw.pleiades.center.management.agent;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.vtw.pleiades.center.management.system.IntegrationSystem;
+import com.vtw.pleiades.center.management.server.IntegrationServer;
 
 public interface AgentView {
 
@@ -12,14 +12,13 @@ public interface AgentView {
 	String getDescription();
 	
 	@JsonIgnore
-	IntegrationSystem getSystem();
+	IntegrationServer getServer();
 	
-	default Long getSystemId() {
-		return getSystem().getId();
+	default String getServerName() {
+		return getServer().getName();
 	}
 	
 	default String getSystemName() {
-		return getSystem().getName();
+		return getServer().getSystem().getName();
 	}
-
 }

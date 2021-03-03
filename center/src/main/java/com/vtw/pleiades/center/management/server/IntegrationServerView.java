@@ -1,6 +1,9 @@
 package com.vtw.pleiades.center.management.server;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.vtw.pleiades.center.management.agent.Agent;
 import com.vtw.pleiades.center.management.system.IntegrationSystem;
 
 public interface IntegrationServerView {
@@ -21,5 +24,11 @@ public interface IntegrationServerView {
 	default String getSystemName() {
 		return getSystem().getName();
 	}
-
+	
+	@JsonIgnore
+	List<Agent> getAgents();
+	
+	default int getAgentsCount() {
+		return getAgents().size();
+	}
 }

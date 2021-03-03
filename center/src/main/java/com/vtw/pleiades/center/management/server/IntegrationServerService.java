@@ -17,6 +17,7 @@ package com.vtw.pleiades.center.management.server;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -38,8 +39,12 @@ public class IntegrationServerService {
 	@Autowired
 	private IntegrationServerValidator validator;
 
-	public Page<IntegrationServerView> list(String keyword, Pageable pageable) {
-		return repository.findAllByNameContainsOrSystem_NameContains(keyword, keyword, pageable);
+	public Page<IntegrationServerView> list(String keyword, String name, String systemName, Pageable pageable) {
+		if (StringUtils.isEmpty(keyword)) {
+			return repository.findAllByNameContainsAndSystem_NameContains(name, systemName, pageable);
+		} else {
+			return repository.findAllByNameContainsOrSystem_NameContains(keyword, keyword, pageable);
+		}
 	}
 	
 	public IntegrationServer get(Long id) {

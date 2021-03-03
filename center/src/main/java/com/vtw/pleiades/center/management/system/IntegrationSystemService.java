@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.vtw.pleiades.center.common.web.validation.ValidationResult;
 import com.vtw.pleiades.center.management.server.IntegrationServer;
@@ -35,8 +36,8 @@ public class IntegrationSystemService {
 	@Autowired
 	private IntegrationSystemValidator validator;
 	
-	public Page<IntegrationSystem> list(Pageable pageable, String name, String description) {
-		return repository.findAll(IntegrationSystemSpecs.filter(name, description), pageable);
+	public Page<IntegrationSystemView> list(Pageable pageable, @RequestParam(required = false, defaultValue = "") String keyword) {
+		return repository.findAllByNameContains(keyword, pageable);
 	}
 	
 	public IntegrationSystem get(Long id) {

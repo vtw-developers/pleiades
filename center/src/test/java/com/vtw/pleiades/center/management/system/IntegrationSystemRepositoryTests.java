@@ -52,9 +52,9 @@ public class IntegrationSystemRepositoryTests {
 		entityManager.persist(system);
 
 		PageRequest pageable = PageRequest.of(0, 10, Sort.by(Arrays.asList(Sort.Order.asc("name"))));
-		Page<IntegrationSystem> systems = repository.findAll(IntegrationSystemSpecs.filter("연계", "설명"), pageable);
+		Page<IntegrationSystemView> systems = repository.findAllByNameContains("시스템", pageable);
 
-		assertThat(systems).extracting(IntegrationSystem::getId).containsOnly(system.getId());
+		assertThat(systems).extracting(IntegrationSystemView::getName).containsOnly(system.getName());
 	}
 	
 	@Test
@@ -71,7 +71,7 @@ public class IntegrationSystemRepositoryTests {
 		entityManager.persist(system5);
 
 		PageRequest pageable = PageRequest.of(0, 10, Sort.by(Arrays.asList(Sort.Order.asc("name"))));
-		Page<IntegrationSystem> systems = repository.findAll(IntegrationSystemSpecs.filter("연계", "설명"), pageable);
+		Page<IntegrationSystemView> systems = repository.findAllByNameContains("시스템", pageable);
 
 		assertThat(systems).size().isEqualTo(2);
 	}
@@ -84,7 +84,7 @@ public class IntegrationSystemRepositoryTests {
 		}
 
 		PageRequest pageable = PageRequest.of(0, 10, Sort.by(Arrays.asList(Sort.Order.asc("name"))));
-		Page<IntegrationSystem> systems = repository.findAll(IntegrationSystemSpecs.filter("연계", "설명"), pageable);
+		Page<IntegrationSystemView> systems = repository.findAllByNameContains("시스템", pageable);
 
 		assertThat(systems).size().isEqualTo(10);
 	}

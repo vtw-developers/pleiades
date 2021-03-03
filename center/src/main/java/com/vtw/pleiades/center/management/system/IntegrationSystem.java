@@ -10,7 +10,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.vtw.pleiades.center.management.server.IntegrationServer;
 
 @Entity
@@ -55,13 +54,8 @@ public class IntegrationSystem {
 		this.description = description;
 	}
 	
-	@JsonIgnore
 	public List<IntegrationServer> getServers() {
 		return servers;
-	}
-	
-	public int getServersCount() {
-		return servers.size();
 	}
 
 	@Override

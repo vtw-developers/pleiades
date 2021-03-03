@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+
+import com.vtw.pleiades.center.management.server.IntegrationServer;
 
 @WebMvcTest(IntegrationSystemController.class)
 class IntegrationSystemTestControllerTests {
@@ -39,10 +42,29 @@ class IntegrationSystemTestControllerTests {
 		IntegrationSystem system = new IntegrationSystem("테스트 연계시스템", "시스템 설명입니다.");
 		
 		PageRequest pageable = PageRequest.of(0, 10, Sort.by(new ArrayList<>()));
-		given(service.list(pageable, "테스트 연계", "시스템 설명")).willReturn(new PageImpl<>(Arrays.asList(system), pageable, 1));
-		System.out.println(service.list(pageable, "테스트 연계", "시스템 설명"));
+		given(service.list(pageable, "테스트 연계")).willReturn(new PageImpl<>(Arrays.asList(new IntegrationSystemView() {
+			@Override
+			public String getName() {
+				return system.getName();
+			}
+			
+			@Override
+			public Long getId() {
+				return system.getId();
+			}
+			
+			@Override
+			public String getDescription() {
+				return system.getDescription();
+			}
+
+			@Override
+			public List<IntegrationServer> getServers() {
+				return system.getServers();
+			}
+		}), pageable, 1));
 		final ResultActions actions = mvc
-				.perform(get("/systems?page=0&size=10&name=테스트 연계&description=시스템 설명").contentType(MediaType.APPLICATION_JSON))
+				.perform(get("/systems?page=0&size=10&name=테스트 연계").contentType(MediaType.APPLICATION_JSON))
 				.andDo(print());
 		actions.andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(jsonPath("$.content[0].name", is("테스트 연계시스템"))).andDo(print());

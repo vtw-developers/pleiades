@@ -30,35 +30,17 @@ public class AgentController {
 	}
 	
 	@PostMapping
-	public ValidationResult create(@RequestBody Agent agent) {
-		ValidationResult validation = validate(agent);
-		if (validation.isValid()) {
-			service.create(agent);
-		}
-		return validation;
+	public ValidationResult create(@RequestBody Agent server) {
+		return service.createWithValidation(server);
 	}
 	
 	@PutMapping("/{id}")
-	public ValidationResult update(@PathVariable Long id, @RequestBody Agent agent) {
-		ValidationResult validation = validate(id, agent);
-		if (validation.isValid()) {
-			service.update(id, agent);
-		}
-		return validation;
+	public ValidationResult update(@PathVariable Long id, @RequestBody Agent server) {
+		return service.updateWithValidation(id, server);
 	}
 	
 	@DeleteMapping("/{id}")
 	public void delete(@PathVariable Long id) {
 		service.delete(id);
-	}
-	
-	@PostMapping("/validate")
-	public ValidationResult validate(@RequestBody Agent agent) {
-		return service.validate(agent);
-	}
-	
-	@PostMapping("/validate/{id}")
-	public ValidationResult validate(@PathVariable Long id, @RequestBody Agent agent) {
-		return service.validate(id, agent);
 	}
 }

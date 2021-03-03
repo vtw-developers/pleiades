@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import com.vtw.pleiades.center.management.agent.Agent;
 import com.vtw.pleiades.center.management.system.IntegrationSystem;
 
 @WebMvcTest(IntegrationServerController.class)
@@ -41,7 +43,7 @@ class IntegrationServerTestControllerTests {
 		IntegrationServer server = new IntegrationServer(system, "테스트 연계서버", "서버 설명입니다.");
 		
 		PageRequest pageable = PageRequest.of(0, 10, Sort.unsorted());
-		given(service.list("서버", pageable)).willReturn(new PageImpl<>(Arrays.asList(new IntegrationServerView() {
+		given(service.list("서버", null, null, pageable)).willReturn(new PageImpl<>(Arrays.asList(new IntegrationServerView() {
 			
 			@Override
 			public IntegrationSystem getSystem() {
@@ -61,6 +63,11 @@ class IntegrationServerTestControllerTests {
 			@Override
 			public String getDescription() {
 				return server.getDescription();
+			}
+
+			@Override
+			public List<Agent> getAgents() {
+				return server.getAgents();
 			}
 		}), pageable, 1));
 		final ResultActions actions = mvc

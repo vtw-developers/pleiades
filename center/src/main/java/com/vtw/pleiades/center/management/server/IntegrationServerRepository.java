@@ -11,7 +11,7 @@ public interface IntegrationServerRepository extends PagingAndSortingRepository<
 	
 	Page<IntegrationServerView> findAllByNameContainsOrSystem_NameContains(String name, String systemName, Pageable pageable);
 	
-	Page<IntegrationServerView> findAllByNameContainsAndDescriptionContainsAndSystem_NameContains(String name, String description, String systemName, Pageable pageable);
+	Page<IntegrationServerView> findAllByNameContainsAndSystem_NameContains(String name, String systemName, Pageable pageable);
 	
 	List<IntegrationServer> findAllByName(String name);
 }
