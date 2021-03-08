@@ -15,8 +15,6 @@
  */
 package com.vtw.pleiades.center.management.server;
 
-import java.util.List;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -52,7 +50,7 @@ public class IntegrationServerService {
 	}
 	
 	public ValidationResult createWithValidation(IntegrationServer server) {
-		setSystemByName(server);
+		//setSystemByName(server);
 		ValidationResult validation = validator.validate(server);
 		if (validation.isValid()) {
 			create(server);
@@ -61,7 +59,7 @@ public class IntegrationServerService {
 	}
 	
 	public ValidationResult updateWithValidation(Long id, IntegrationServer server) {
-		setSystemByName(server);
+		//setSystemByName(server);
 		ValidationResult validation = validator.validate(id, server);
 		if (validation.isValid()) {
 			update(id, server);
@@ -88,13 +86,13 @@ public class IntegrationServerService {
 		return repository.save(oldServer);
 	}
 	
-	private void setSystemByName(IntegrationServer server) {
-		IntegrationSystem system = server.getSystem();
-		if (system.getId() == null && system.getName() != null) {
-			List<IntegrationSystem> systems = systemRepository.findAllByName(system.getName());
-			if (systems.size() > 0) {
-				server.setSystem(systems.get(0));
-			}
-		}
-	}
+//	private void setSystemByName(IntegrationServer server) {
+//		IntegrationSystem system = server.getSystem();
+//		if (system.getId() == null && system.getName() != null) {
+//			List<IntegrationSystem> systems = systemRepository.findAllByName(system.getName());
+//			if (systems.size() > 0) {
+//				server.setSystem(systems.get(0));
+//			}
+//		}
+//	}
 }

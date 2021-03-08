@@ -14,8 +14,16 @@ public interface AgentView {
 	@JsonIgnore
 	IntegrationServer getServer();
 	
+	default Long getServerId() {
+		return getServer().getId();
+	}
+	
 	default String getServerName() {
 		return getServer().getName();
+	}
+	
+	default Long getSystemId() {
+		return getServer().getSystem().getId();
 	}
 	
 	default String getSystemName() {

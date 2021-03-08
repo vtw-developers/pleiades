@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.vtw.pleiades.center.management.agent.Agent;
 import com.vtw.pleiades.center.management.system.IntegrationSystem;
 
@@ -68,6 +69,7 @@ public class IntegrationServer {
 		this.system = system;
 	}
 	
+	@JsonIgnore
 	public List<Agent> getAgents() {
 		return agents;
 	}

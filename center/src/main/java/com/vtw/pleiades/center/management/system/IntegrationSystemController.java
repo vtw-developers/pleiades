@@ -55,4 +55,9 @@ public class IntegrationSystemController {
 	public List<IntegrationServer> getServers(@PathVariable Long id) {
 		return service.getServers(id);
 	}
+	
+	@GetMapping("/{id}")	
+	public IntegrationSystem get(@PathVariable Long id) {
+		return service.get(id);
+	}
 }
