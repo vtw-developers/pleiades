@@ -1,5 +1,7 @@
 package com.vtw.pleiades.center.common.web.validation;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class ValidationResult {
 
 	private boolean valid;
@@ -29,6 +31,7 @@ public class ValidationResult {
 		return valid;
 	}
 	
+	@JsonIgnore
 	public boolean isInvalid() {
 		return !valid;
 	}
