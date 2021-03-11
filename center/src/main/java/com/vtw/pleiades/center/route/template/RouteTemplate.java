@@ -1,8 +1,15 @@
 package com.vtw.pleiades.center.route.template;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+
+import com.vtw.pleiades.center.route.template.attribute.RouteTemplateAttribute;
 
 @Entity
 public class RouteTemplate {
@@ -14,6 +21,9 @@ public class RouteTemplate {
 	private String name;
 
 	private String description;
+	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "template")
+	private final List<RouteTemplateAttribute> attributes = new ArrayList<>();
 
 	public RouteTemplate() {
 	}
@@ -44,8 +54,13 @@ public class RouteTemplate {
 		this.description = description;
 	}
 
+	public List<RouteTemplateAttribute> getAttributes() {
+		return attributes;
+	}
+
 	@Override
 	public String toString() {
-		return "RouteTemplate [id=" + id + ", name=" + name + ", description=" + description + "]";
+		return "RouteTemplate [id=" + id + ", name=" + name + ", description=" + description + ", attributes="
+				+ attributes + "]";
 	}
 }

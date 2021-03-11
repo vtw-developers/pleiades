@@ -1,14 +1,21 @@
 package com.vtw.pleiades.center;
 
-import java.util.Arrays;
+import javax.persistence.EntityManager;
+import javax.transaction.Transactional;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 
+import com.vtw.pleiades.center.constraints.datasource.DataSourceType;
+import com.vtw.pleiades.center.constraints.datasource.DataSourceTypeAttr;
+import com.vtw.pleiades.center.constraints.datasource.DataSourceTypeAttrRepository;
+import com.vtw.pleiades.center.constraints.datasource.DataSourceTypeRepository;
+import com.vtw.pleiades.center.constraints.datasource.DataType;
+import com.vtw.pleiades.center.constraints.datasource.DataTypeAttr;
+import com.vtw.pleiades.center.constraints.datasource.DataTypeAttrRepository;
+import com.vtw.pleiades.center.constraints.datasource.DataTypeRepository;
 import com.vtw.pleiades.center.management.agent.Agent;
 import com.vtw.pleiades.center.management.agent.AgentRepository;
 import com.vtw.pleiades.center.management.route.Route;
@@ -28,15 +35,20 @@ public class PleiadesCenterApplication {
 	}
 
 	@Bean
-	public CommandLineRunner run(
+	public CommandLineRunner run(DataTypeRepository dataTypeRepository,
+			DataTypeAttrRepository dataTypeAttrRepository,
+			DataSourceTypeRepository dataSourceTypeRepository,
+			DataSourceTypeAttrRepository dataSourceTypeAttrRepository,
+			
 			IntegrationSystemRepository systemRepo, 
 			IntegrationServerRepository serverRepo, 
 			AgentRepository agentRepository,
 			RouteRepository routeRepository,
 			RouteTemplateRepository templateRepository) throws Exception {
 		return (args) -> {
-			create(systemRepo, serverRepo, agentRepository, routeRepository, templateRepository);
-			create2(systemRepo, serverRepo, agentRepository, routeRepository, templateRepository);
+			createConstraints(dataTypeRepository, dataTypeAttrRepository, dataSourceTypeRepository, dataSourceTypeAttrRepository);
+//			create(systemRepo, serverRepo, agentRepository, routeRepository, templateRepository);
+//			create2(systemRepo, serverRepo, agentRepository, routeRepository, templateRepository);
 			
 
 			
@@ -57,6 +69,29 @@ public class PleiadesCenterApplication {
 //			Page<IntegrationSystem> systems = systemRepo.findAll(IntegrationSystemSpecs.filter("연계", "설명"), pageable);
 //			System.out.println(systems.getContent());
 		};
+	}
+	
+	private static void createConstraints(DataTypeRepository dataTypeRepository,
+			DataTypeAttrRepository dataTypeAttrRepository,
+			DataSourceTypeRepository dataSourceTypeRepository,
+			DataSourceTypeAttrRepository dataSourceTypeAttrRepository) {
+		DataType dataType = new DataType("DB테이블");
+		dataTypeRepository.save(dataType);
+		
+		DataTypeAttr attr = new DataTypeAttr(dataType, "DB테이블명", "string", 0);
+		dataTypeAttrRepository.save(attr);
+		
+		DataTypeAttr attr2 = new DataTypeAttr(dataType, "DB테이블명", "string", 1);
+		dataTypeAttrRepository.save(attr2);
+		
+		DataSourceType dataSourceType = new DataSourceType("JDBC");
+		dataSourceTypeRepository.save(dataSourceType);
+		
+		DataSourceTypeAttr dataSourceTypeAttr = new DataSourceTypeAttr(dataSourceType, "DB종류", "dbType", 0);
+		dataSourceTypeAttrRepository.save(dataSourceTypeAttr);
+		
+		DataSourceTypeAttr dataSourceTypeAttr2 = new DataSourceTypeAttr(dataSourceType, "URL", "string", 1);
+		dataSourceTypeAttrRepository.save(dataSourceTypeAttr2);
 	}
 	
 	private static void create(IntegrationSystemRepository systemRepo, 
