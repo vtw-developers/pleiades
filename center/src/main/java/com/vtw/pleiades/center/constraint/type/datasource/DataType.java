@@ -1,7 +1,9 @@
-package com.vtw.pleiades.center.constraints.datasource;
+package com.vtw.pleiades.center.constraint.type.datasource;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -10,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderColumn;
 
 @Entity
 public class DataType {
@@ -20,11 +23,12 @@ public class DataType {
 	
 	private String name;
 	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "dataType")
+	@OneToMany(mappedBy = "dataType", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OrderColumn(name = "position")
 	private final List<DataTypeAttr> attrs = new ArrayList<>();
 	
-	@ManyToMany(cascade = CascadeType.ALL)
-	private final List<DataSourceType> dataSourceTypes = new ArrayList<>();
+	@ManyToMany
+	private final Set<DatasourceType> dataSourceTypes = new HashSet<>();
 	
 	public DataType() {
 	}
@@ -50,10 +54,26 @@ public class DataType {
 	}
 	
 	public List<DataTypeAttr> getAttrs() {
+		final List<DataTypeAttr> list = new ArrayList<>();
+		list.addAll(attrs);
 		return attrs;
 	}
+	
+	public void setAttrs(List<DataTypeAttr> attrs) {
+		this.attrs.clear();
+		this.attrs.addAll(attrs);
+		attrs.forEach(attr -> attr.setDataType(this));
+	}
+	
+	public void addAttr(DataTypeAttr attr) {
+		attrs.add(attr);
+	}
+	
+	public void removeAttr(DataTypeAttr attr) {
+		attrs.remove(attr);
+	}
 
-	public List<DataSourceType> getDataSourceTypes() {
+	public Set<DatasourceType> getDataSourceTypes() {
 		return dataSourceTypes;
 	}
 

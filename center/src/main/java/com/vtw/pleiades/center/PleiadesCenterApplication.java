@@ -1,21 +1,16 @@
 package com.vtw.pleiades.center;
 
-import javax.persistence.EntityManager;
-import javax.transaction.Transactional;
-
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import com.vtw.pleiades.center.constraints.datasource.DataSourceType;
-import com.vtw.pleiades.center.constraints.datasource.DataSourceTypeAttr;
-import com.vtw.pleiades.center.constraints.datasource.DataSourceTypeAttrRepository;
-import com.vtw.pleiades.center.constraints.datasource.DataSourceTypeRepository;
-import com.vtw.pleiades.center.constraints.datasource.DataType;
-import com.vtw.pleiades.center.constraints.datasource.DataTypeAttr;
-import com.vtw.pleiades.center.constraints.datasource.DataTypeAttrRepository;
-import com.vtw.pleiades.center.constraints.datasource.DataTypeRepository;
+import com.vtw.pleiades.center.constraint.type.datasource.DataType;
+import com.vtw.pleiades.center.constraint.type.datasource.DataTypeAttr;
+import com.vtw.pleiades.center.constraint.type.datasource.DatasourceType;
+import com.vtw.pleiades.center.constraint.type.datasource.DatasourceTypeAttr;
+import com.vtw.pleiades.center.constraint.type.datasource.repository.DataTypeRepository;
+import com.vtw.pleiades.center.constraint.type.datasource.repository.DatasourceTypeRepository;
 import com.vtw.pleiades.center.management.agent.Agent;
 import com.vtw.pleiades.center.management.agent.AgentRepository;
 import com.vtw.pleiades.center.management.route.Route;
@@ -36,9 +31,7 @@ public class PleiadesCenterApplication {
 
 	@Bean
 	public CommandLineRunner run(DataTypeRepository dataTypeRepository,
-			DataTypeAttrRepository dataTypeAttrRepository,
-			DataSourceTypeRepository dataSourceTypeRepository,
-			DataSourceTypeAttrRepository dataSourceTypeAttrRepository,
+			DatasourceTypeRepository dataSourceTypeRepository,
 			
 			IntegrationSystemRepository systemRepo, 
 			IntegrationServerRepository serverRepo, 
@@ -46,7 +39,7 @@ public class PleiadesCenterApplication {
 			RouteRepository routeRepository,
 			RouteTemplateRepository templateRepository) throws Exception {
 		return (args) -> {
-			createConstraints(dataTypeRepository, dataTypeAttrRepository, dataSourceTypeRepository, dataSourceTypeAttrRepository);
+			createConstraints(dataTypeRepository, dataSourceTypeRepository);
 //			create(systemRepo, serverRepo, agentRepository, routeRepository, templateRepository);
 //			create2(systemRepo, serverRepo, agentRepository, routeRepository, templateRepository);
 			
@@ -72,26 +65,38 @@ public class PleiadesCenterApplication {
 	}
 	
 	private static void createConstraints(DataTypeRepository dataTypeRepository,
-			DataTypeAttrRepository dataTypeAttrRepository,
-			DataSourceTypeRepository dataSourceTypeRepository,
-			DataSourceTypeAttrRepository dataSourceTypeAttrRepository) {
-		DataType dataType = new DataType("DB테이블");
-		dataTypeRepository.save(dataType);
-		
-		DataTypeAttr attr = new DataTypeAttr(dataType, "DB테이블명", "string", 0);
-		dataTypeAttrRepository.save(attr);
-		
-		DataTypeAttr attr2 = new DataTypeAttr(dataType, "DB테이블명", "string", 1);
-		dataTypeAttrRepository.save(attr2);
-		
-		DataSourceType dataSourceType = new DataSourceType("JDBC");
-		dataSourceTypeRepository.save(dataSourceType);
-		
-		DataSourceTypeAttr dataSourceTypeAttr = new DataSourceTypeAttr(dataSourceType, "DB종류", "dbType", 0);
-		dataSourceTypeAttrRepository.save(dataSourceTypeAttr);
-		
-		DataSourceTypeAttr dataSourceTypeAttr2 = new DataSourceTypeAttr(dataSourceType, "URL", "string", 1);
-		dataSourceTypeAttrRepository.save(dataSourceTypeAttr2);
+			DatasourceTypeRepository dataSourceTypeRepository) {
+//		DataType dataType = new DataType("DB테이블");
+//		DataTypeAttr attr = new DataTypeAttr(dataType, "DB테이블명", "string");
+//		DataTypeAttr attr2 = new DataTypeAttr(dataType, "DB테이블명2", "string");
+//		dataType.createAttrs(attr, attr2);
+//		dataTypeRepository.save(dataType);
+//		
+//		DatasourceType dataSourceType = new DatasourceType("JDBC");
+//		//dataSourceTypeRepository.save(dataSourceType);
+//		//dataSourceTypeRepository.save(dataSourceType);
+//		DatasourceTypeAttr dataSourceTypeAttr = new DatasourceTypeAttr(dataSourceType, "DB종류", "dbType");
+//		//dataSourceTypeAttrRepository.save(dataSourceTypeAttr);
+//		
+//		DatasourceTypeAttr dataSourceTypeAttr2 = new DatasourceTypeAttr(dataSourceType, "URL", "string");
+//		//dataSourceTypeAttrRepository.save(dataSourceTypeAttr2);
+//		
+//		dataSourceType.addAttr(dataSourceTypeAttr);
+//		dataSourceType.addAttr(dataSourceTypeAttr2);
+//		
+//		dataSourceTypeRepository.save(dataSourceType);
+//		dataSourceType.getAttrs().clear();
+//		
+//		DatasourceTypeAttr dataSourceTypeAttr3 = new DatasourceTypeAttr(dataSourceType, "DB종류", "dbType");
+//		//dataSourceTypeAttrRepository.save(dataSourceTypeAttr);
+//		
+//		DatasourceTypeAttr dataSourceTypeAttr4 = new DatasourceTypeAttr(dataSourceType, "URL2", "string");
+//		//dataSourceTypeAttrRepository.save(dataSourceTypeAttr2);
+//		
+//		dataSourceType.addAttr(dataSourceTypeAttr4);
+//		dataSourceType.addAttr(dataSourceTypeAttr3);
+//		
+//		dataSourceTypeRepository.save(dataSourceType);
 	}
 	
 	private static void create(IntegrationSystemRepository systemRepo, 

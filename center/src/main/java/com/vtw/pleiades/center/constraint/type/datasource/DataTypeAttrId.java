@@ -1,4 +1,4 @@
-package com.vtw.pleiades.center.constraints.datasource;
+package com.vtw.pleiades.center.constraint.type.datasource;
 
 import java.io.Serializable;
 

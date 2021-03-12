@@ -1,4 +1,4 @@
-package com.vtw.pleiades.center.constraints.datasource;
+package com.vtw.pleiades.center.constraint.type.datasource;
 
 import java.io.Serializable;
 
@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.ManyToOne;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @IdClass(DataTypeAttrId.class)
@@ -22,18 +24,19 @@ public class DataTypeAttr implements Serializable {
 	
 	private String type;
 	
-	private int position;
+	private String localeName;
 	
 	public DataTypeAttr() {
 	}
 
-	public DataTypeAttr(DataType dataType, String name, String type, int position) {
+	public DataTypeAttr(DataType dataType, String name, String type, String localeName) {
 		this.dataType = dataType;
 		this.name = name;
 		this.type = type;
-		this.position = position;
+		this.localeName = localeName;
 	}
 
+	@JsonIgnore
 	public DataType getDataType() {
 		return dataType;
 	}
@@ -49,6 +52,8 @@ public class DataTypeAttr implements Serializable {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	
 
 	public String getType() {
 		return type;
@@ -57,18 +62,18 @@ public class DataTypeAttr implements Serializable {
 	public void setType(String type) {
 		this.type = type;
 	}
-
-	public int getPosition() {
-		return position;
+	
+	public String getLocaleName() {
+		return localeName;
 	}
 
-	public void setPosition(int position) {
-		this.position = position;
+	public void setLocaleName(String localeName) {
+		this.localeName = localeName;
 	}
 
 	@Override
 	public String toString() {
-		return "DataTypeAttr [dataType=" + dataType + ", name=" + name + ", type=" + type + ", position=" + position
+		return "DataTypeAttr [dataType=" + dataType + ", name=" + name + ", type=" + type + ", localeName=" + localeName
 				+ "]";
 	}
 }
