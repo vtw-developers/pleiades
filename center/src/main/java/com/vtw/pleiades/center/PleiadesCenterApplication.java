@@ -1,5 +1,7 @@
 package com.vtw.pleiades.center;
 
+import java.util.Arrays;
+
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -67,36 +69,40 @@ public class PleiadesCenterApplication {
 	private static void createConstraints(DataTypeRepository dataTypeRepository,
 			DatasourceTypeRepository dataSourceTypeRepository) {
 //		DataType dataType = new DataType("DB테이블");
-//		DataTypeAttr attr = new DataTypeAttr(dataType, "DB테이블명", "string");
-//		DataTypeAttr attr2 = new DataTypeAttr(dataType, "DB테이블명2", "string");
-//		dataType.createAttrs(attr, attr2);
+//		DataTypeAttr attr = new DataTypeAttr(dataType, "DB테이블명", "DB테이블명", "string");
+//		DataTypeAttr attr2 = new DataTypeAttr(dataType, "DB테이블명", "DB테이블명2", "string");
+//		dataType.setAttrs(Arrays.asList(attr, attr2));
 //		dataTypeRepository.save(dataType);
-//		
-//		DatasourceType dataSourceType = new DatasourceType("JDBC");
-//		//dataSourceTypeRepository.save(dataSourceType);
-//		//dataSourceTypeRepository.save(dataSourceType);
-//		DatasourceTypeAttr dataSourceTypeAttr = new DatasourceTypeAttr(dataSourceType, "DB종류", "dbType");
-//		//dataSourceTypeAttrRepository.save(dataSourceTypeAttr);
-//		
-//		DatasourceTypeAttr dataSourceTypeAttr2 = new DatasourceTypeAttr(dataSourceType, "URL", "string");
-//		//dataSourceTypeAttrRepository.save(dataSourceTypeAttr2);
-//		
-//		dataSourceType.addAttr(dataSourceTypeAttr);
-//		dataSourceType.addAttr(dataSourceTypeAttr2);
-//		
-//		dataSourceTypeRepository.save(dataSourceType);
-//		dataSourceType.getAttrs().clear();
-//		
-//		DatasourceTypeAttr dataSourceTypeAttr3 = new DatasourceTypeAttr(dataSourceType, "DB종류", "dbType");
-//		//dataSourceTypeAttrRepository.save(dataSourceTypeAttr);
-//		
-//		DatasourceTypeAttr dataSourceTypeAttr4 = new DatasourceTypeAttr(dataSourceType, "URL2", "string");
-//		//dataSourceTypeAttrRepository.save(dataSourceTypeAttr2);
-//		
-//		dataSourceType.addAttr(dataSourceTypeAttr4);
-//		dataSourceType.addAttr(dataSourceTypeAttr3);
-//		
-//		dataSourceTypeRepository.save(dataSourceType);
+		//dataTypeRepository.save(dataType);
+		
+		DatasourceType dataSourceType = new DatasourceType("JDBC");
+		//dataSourceTypeRepository.save(dataSourceType);
+		//dataSourceTypeRepository.save(dataSourceType);
+		DatasourceTypeAttr dataSourceTypeAttr = new DatasourceTypeAttr(dataSourceType, "DB종류", "dbType");
+		//dataSourceTypeAttrRepository.save(dataSourceTypeAttr);
+		
+		DatasourceTypeAttr dataSourceTypeAttr2 = new DatasourceTypeAttr(dataSourceType, "URL", "string");
+		//dataSourceTypeAttrRepository.save(dataSourceTypeAttr2);
+		
+		dataSourceType.addAttr(dataSourceTypeAttr);
+		dataSourceType.addAttr(dataSourceTypeAttr2);
+		
+		dataSourceTypeRepository.save(dataSourceType);
+		dataSourceType.getAttrs().clear();
+		
+		DatasourceTypeAttr dataSourceTypeAttr3 = new DatasourceTypeAttr(dataSourceType, "DB종류", "dbType");
+		//dataSourceTypeAttrRepository.save(dataSourceTypeAttr);
+		
+		DatasourceTypeAttr dataSourceTypeAttr4 = new DatasourceTypeAttr(dataSourceType, "URL2", "string");
+		//dataSourceTypeAttrRepository.save(dataSourceTypeAttr2);
+		
+		dataSourceType.addAttr(dataSourceTypeAttr4);
+		dataSourceType.addAttr(dataSourceTypeAttr3);
+		
+		dataSourceTypeRepository.save(dataSourceType);
+		
+		//dataType.getDataSourceTypes().add(dataSourceType);
+		
 	}
 	
 	private static void create(IntegrationSystemRepository systemRepo, 

@@ -28,7 +28,7 @@ public class DataType {
 	private final List<DataTypeAttr> attrs = new ArrayList<>();
 	
 	@ManyToMany
-	private final Set<DatasourceType> dataSourceTypes = new HashSet<>();
+	private final Set<DatasourceType> datasourceTypes = new HashSet<>();
 	
 	public DataType() {
 	}
@@ -73,13 +73,19 @@ public class DataType {
 		attrs.remove(attr);
 	}
 
-	public Set<DatasourceType> getDataSourceTypes() {
-		return dataSourceTypes;
+	public Set<DatasourceType> getDatasourceTypes() {
+		return datasourceTypes;
+	}
+	
+	public void setDatasourceTypes(Set<DatasourceType> attrs) {
+		this.datasourceTypes.clear();
+		this.datasourceTypes.addAll(attrs);
+		//attrs.forEach(attr -> attr.setDataType(this));
 	}
 
 	@Override
 	public String toString() {
-		return "DataType [id=" + id + ", name=" + name + ", attrs=" + attrs + ", dataSourceTypes=" + dataSourceTypes
+		return "DataType [id=" + id + ", name=" + name + ", attrs=" + attrs + ", dataSourceTypes=" + datasourceTypes
 				+ "]";
 	}
 }

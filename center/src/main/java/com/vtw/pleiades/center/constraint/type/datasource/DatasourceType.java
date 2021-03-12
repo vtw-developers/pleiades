@@ -14,6 +14,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class DatasourceType {
 
@@ -49,6 +51,7 @@ public class DatasourceType {
 		this.name = name;
 	}
 
+	@JsonIgnore
 	public List<DatasourceTypeAttr> getAttrs() {
 		final List<DatasourceTypeAttr> list = new ArrayList<>();
 		list.addAll(attrs);
@@ -70,6 +73,7 @@ public class DatasourceType {
 		attrs.remove(attr);
 	}
 
+	@JsonIgnore
 	public Set<DataType> getDataTypes() {
 		return dataTypes;
 	}
